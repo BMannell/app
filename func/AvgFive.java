@@ -18,7 +18,7 @@ public class AvgFive extends GPNode
         final GPIndividual individual,
         final Problem problem)
     {
-        PicData rd = ((PicData)(input));
-        rd.x = ((PicProblem)problem).currentAvg5;
+        ProjectData rd = ((ProjectData)(input));
+        rd.x = ((ProjectProblem)problem).currentAvg5;
     }
 }

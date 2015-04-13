@@ -95,7 +95,7 @@ public class RegERC extends ERC
         final GPIndividual individual,
         final Problem problem)
         {
-        PicData rd = ((PicData)(input));
+        ProjectData rd = ((ProjectData)(input));
         rd.x = value;
         }
     }

@@ -51,7 +51,7 @@ public class Mul extends GPNode
         final Problem problem)
         {
         double result;
-        PicData rd = ((PicData)(input));
+        ProjectData rd = ((ProjectData)(input));
 
         children[0].eval(state,thread,input,stack,individual,problem);
         result = rd.x;

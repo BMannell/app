@@ -50,7 +50,7 @@ public class Div extends GPNode
         final GPIndividual individual,
         final Problem problem)
         {
-        PicData rd = ((PicData)(input));
+        ProjectData rd = ((ProjectData)(input));
 
         // evaluate children[1] first to determine if the demoniator is 0
         children[1].eval(state,thread,input,stack,individual,problem);

@@ -1,6 +1,6 @@
 package ec.app;
 
-import ec.app.PicData;
+import ec.app.ProjectData;
 import ec.util.*;
 import ec.*;
 import ec.gp.*;
@@ -17,7 +17,7 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.awt.Color;
 
-public class PicProblem extends GPProblem implements SimpleProblemForm
+public class ProjectProblem extends GPProblem implements SimpleProblemForm
 {
     private static final long serialVersionUID = 1;
 
@@ -56,8 +56,8 @@ public class PicProblem extends GPProblem implements SimpleProblemForm
         super.setup(state,base);
 
         // verify our input is the right class (or subclasses from it)
-        if (!(input instanceof PicData))
-            state.output.fatal("GPData class must subclass from " + PicData.class,
+        if (!(input instanceof ProjectData))
+            state.output.fatal("GPData class must subclass from " + ProjectData.class,
                 base.push(P_DATA), null);
 
                 //section of image that testing data is to be taken from
@@ -330,7 +330,7 @@ public class PicProblem extends GPProblem implements SimpleProblemForm
     {
         if (!ind.evaluated)  // don't bother reevaluating
         {
-            PicData input = (PicData)(this.input);
+            ProjectData input = (ProjectData)(this.input);
 
             int hits = 0;
             int count = 0;
@@ -412,7 +412,7 @@ public class PicProblem extends GPProblem implements SimpleProblemForm
     public void describe(EvolutionState state, Individual ind, int subpopulation, int threadnum, int log)
     {
         System.out.println("Beginning Test");
-            PicData input = (PicData)(this.input);
+            ProjectData input = (ProjectData)(this.input);
 
             int hits = 0;
             int count = 0;

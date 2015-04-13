@@ -19,7 +19,7 @@ public class Edge extends GPNode
         final GPIndividual individual,
         final Problem problem)
     {
-        PicData rd = ((PicData)(input));
-        rd.x = ((PicProblem)problem).currentEdge;
+        ProjectData rd = ((ProjectData)(input));
+        rd.x = ((ProjectProblem)problem).currentEdge;
     }
 }

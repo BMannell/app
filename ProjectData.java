@@ -1,12 +1,12 @@
 package ec.app;
 import ec.gp.*;
 
-public class PicData extends GPData
+public class ProjectData extends GPData
     {
     public double x;
 
     public void copyTo(final GPData gpd) 
         { 
-        	((PicData)gpd).x = x;
+        	((ProjectData)gpd).x = x;
         }
     }

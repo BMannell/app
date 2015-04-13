@@ -19,7 +19,7 @@ public class AvgSeven extends GPNode
         final GPIndividual individual,
         final Problem problem)
     {
-        PicData rd = ((PicData)(input));
-        rd.x = ((PicProblem)problem).currentAvg7;
+        ProjectData rd = ((ProjectData)(input));
+        rd.x = (ProjectProblem)problem).currentAvg7;
     }
 }

@@ -50,7 +50,7 @@ public class Exp extends GPNode
         final GPIndividual individual,
         final Problem problem)
         {
-        PicData rd = ((PicData)(input));
+        ProjectData rd = ((ProjectData)(input));
 
         children[0].eval(state,thread,input,stack,individual,problem);
         rd.x = /*Strict*/Math.exp(rd.x);
