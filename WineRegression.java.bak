@@ -1,0 +1,237 @@
+package ec.app.parttwo;
+import ec.app.regression.SyRegData;
+import ec.util.*;
+import ec.*;
+import ec.gp.*;
+import ec.gp.koza.*;
+import ec.simple.*;
+import java.io.*;
+import java.util.*;
+
+public class WineRegression extends GPProblem implements SimpleProblemForm
+    {
+    private static final long serialVersionUID = 1;
+
+    //number of records to test from
+    public static final String P_SIZE = "size";
+
+    //percent of records to use for testing
+    public static final String P_TRAIN = "trainers";
+
+    //file to get data from
+    public static final String P_FILE = "file";
+
+    //file to output stats for confusion matrix
+    public static final String P_CONFUSION = "confusion";
+
+    public double currentFA;
+    public double currentVA;
+    public double currentCA;
+    public double currentRS;
+    public double currentCH;
+    public double currentFSD;
+    public double currentTSD;
+    public double currentDE;
+    public double currentPH;
+    public double currentSU;
+    public double currentAL;
+
+    //number of records to use
+    //will be split in two to be used for training and testing
+    public int dataSetSize;
+    public int trainingSetSize;
+    public int testingSetSize;
+    public double trainingData[][];
+    public double testingData[][];
+
+
+    public int confLog;
+
+    public void setup(final EvolutionState state,final Parameter base){
+
+        super.setup(state,base);
+
+        // verify our input is the right class (or subclasses from it)
+        if (!(input instanceof SyRegData))
+            state.output.fatal("GPData class must subclass from " + SyRegData.class,
+                base.push(P_DATA), null);
+        
+        trainingSetSize = state.parameters.getInt(base.push(P_TRAIN),null,0.1);
+        if (trainingSetSize<1) state.output.fatal("Training Set Size must be an integer greater than 0", base.push(P_SIZE));
+
+        //System.out.println("Data Size: " + dataSetSize + " TrainingSize: " + trainingSize + " Training: " + trainingSetSize + " TestingSetSize: "  + testingSetSize);
+
+        //get input file to load data from
+        InputStream inputfile = state.parameters.getResource(base.push(P_FILE), null);
+
+                //add data to tables
+        initDataTables(inputfile, state);
+
+
+        File confFile =  state.parameters.getFile(base.push(P_CONFUSION), null);
+
+        if (confFile!=null) try
+        {
+            confLog = state.output.addLog(confFile,true);
+        }
+        catch (IOException i)
+        {
+            state.output.fatal("An IOException occurred while trying to create the log " + 
+                confFile + ":\n" + i);
+        }
+
+
+    }
+
+    private void initDataTables(InputStream inputfile, final EvolutionState state){
+
+        ArrayList<double[]> inputs = new ArrayList<double[]>();
+        
+        try
+        {
+            Scanner scan = new Scanner(inputfile);
+            for(int x = 0; x < dataSetSize; x++)
+            {
+                double row[] = new double[12];
+                for(int y = 0; y < 12; y ++)
+                {
+                    if (scan.hasNextDouble())
+                        row[y] = scan.nextDouble();
+                    else state.output.fatal("Not enough data points in file: expected " + (dataSetSize*12));
+                }
+                inputs.add(row);
+            }
+        }
+        catch (NumberFormatException e)
+        {
+            state.output.fatal("Some tokens in the file were not numbers.");
+        }
+
+
+        trainingData = new double[trainingSetSize][12];
+        testingData = new double[inputs.size()][12];
+
+        //random number genreator to pick random records
+        Random rando = new Random();
+
+        //grab a random record from the inputs and add it to the training set
+        for(int i = 0; i<trainingSetSize;i++)
+            trainingData[i] = inputs.remove(rando.nextInt(inputs.size()-1));
+        
+        for(int i = 0; i < inpts.size();i++)
+            testingData[i] = inputs.get(i);
+        
+    }
+
+    public void evaluate(final EvolutionState state, 
+        final Individual ind, 
+        final int subpopulation,
+        final int threadnum)
+        {
+        if (!ind.evaluated)  // don't bother reevaluating
+            {
+            SyRegData input = (SyRegData)(this.input);
+
+            int hits = 0;
+            double sum = 0.0;
+            double result;
+            for (int y=0;y<trainingSetSize;y++)
+                {
+                    currentFA = trainingData[y][0];
+                    currentVA = trainingData[y][1];
+                    currentCA = trainingData[y][2];
+                    currentRS = trainingData[y][3];
+                    currentCH = trainingData[y][4];
+                    currentFSD = trainingData[y][5];
+                    currentTSD = trainingData[y][6];
+                    currentDE = trainingData[y][7];
+                    currentPH = trainingData[y][8];
+                    currentSU = trainingData[y][9];
+                    currentAL = trainingData[y][10];
+                ((GPIndividual)ind).trees[0].child.eval(
+                    state,threadnum,input,stack,((GPIndividual)ind),this);
+
+                final double HIT_LEVEL = 0.01;
+                final double PROBABLY_ZERO = 1.11E-15;
+                final double BIG_NUMBER = 1.0e15;  // the same as lilgp uses
+
+
+                result = Math.abs(trainingData[y][11] - input.x);
+
+                if (! (result < BIG_NUMBER ) )
+                    result = BIG_NUMBER;
+
+                else if (result<PROBABLY_ZERO)
+                    result = 0.0;
+                    
+                if (result <= HIT_LEVEL) hits++;
+
+                sum += result;              
+                }
+
+            KozaFitness f = ((KozaFitness)ind.fitness);
+            f.setStandardizedFitness(state, sum);
+            f.hits = hits;
+            ind.evaluated = true;
+            }
+        }
+
+        public void describe(final EvolutionState state, 
+            final Individual ind, 
+            final int subpopulation,
+            final int threadnum){
+
+
+
+            SyRegData input = (SyRegData)(this.input);
+
+            int hits = 0;
+            double sum = 0.0;
+            double result;
+            for (int y=0;y<testingSetSize;y++)
+            {
+                currentFA = testingData[y][0];
+                currentVA = testingData[y][1];
+                currentCA = testingData[y][2];
+                currentRS = testingData[y][3];
+                currentCH = testingData[y][4];
+                currentFSD = testingData[y][5];
+                currentTSD = testingData[y][6];
+                currentDE = testingData[y][7];
+                currentPH = testingData[y][8];
+                currentSU = testingData[y][9];
+                currentAL = testingData[y][10];
+                ((GPIndividual)ind).trees[0].child.eval(
+                    state,threadnum,input,stack,((GPIndividual)ind),this);
+
+                final double HIT_LEVEL = 0.01;
+                final double PROBABLY_ZERO = 1.11E-15;
+                final double BIG_NUMBER = 1.0e15;  // the same as lilgp uses
+
+
+                try{
+                    state.output.println(testingData[y][11] + " " + input.x, confLog);
+                }catch(OutputException oe){
+                    //caught
+                }
+
+                result = Math.abs(testingData[y][11] - input.x);
+
+                if (! (result < BIG_NUMBER ) ) 
+                result = BIG_NUMBER;
+
+                else if (result<PROBABLY_ZERO)
+                result = 0.0;
+
+                if (result <= HIT_LEVEL) hits++;
+
+                sum += result;              
+            }
+
+            // the fitness better be KozaFitness!
+            KozaFitness f = ((KozaFitness)ind.fitness);
+            f.setStandardizedFitness(state, sum);
+            f.hits = hits;
+            ind.evaluated = true;
+        }
+    }
