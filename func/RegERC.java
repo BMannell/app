@@ -1,9 +1,16 @@
+
+/*
+  Copyright 2006 by Sean Luke
+  Licensed under the Academic Free License version 3.0
+  See the file "LICENSE" for more information
+*/
+  
 package ec.app.func;
 import ec.*;
 import ec.app.*;
 import ec.gp.*;
 import ec.util.*;
-
+import java.io.*;
 
 /* 
  * RegERC.java

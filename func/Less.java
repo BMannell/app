@@ -27,8 +27,8 @@ public class Less extends GPNode
         // can't shortcut because of NaN or +-Infinity
 
         children[1].eval(state,thread,input,stack,individual,problem);
-        if(result < rd.x){rd.x = 1.0;}
-        else{rd.x =1.0;}
+        if(result < rd.x) {rd.b = true;}
+        else {rd.b =false;}
         }
     }
 

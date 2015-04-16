@@ -21,9 +21,12 @@ public class If extends GPNode
         ProjectData rd = ((ProjectData)(input));
 
         children[0].eval(state,thread,input,stack,individual,problem);
-        boolean test = rd.x == 1.0;
-        if(test){   children[1].eval(state,thread,input,stack,individual,problem);}
-        else{       children[2].eval(state,thread,input,stack,individual,problem);}
+        if(rd.b){   
+            children[1].eval(state,thread,input,stack,individual,problem);
+        }
+        else{       
+            children[2].eval(state,thread,input,stack,individual,problem);
+        }
 
 
         }

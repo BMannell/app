@@ -1,0 +1,161 @@
+parent.0 = ../gp/koza/koza.params
+
+#define type
+gp.type.a.size = 2
+gp.type.a.0.name = double
+gp.type.a.1.name = boolean
+gp.tc.0.returns = double
+
+# define node contraints
+
+gp.nc.size = 5
+
+gp.nc.0 = ec.gp.GPNodeConstraints
+gp.nc.0.name = nc0
+gp.nc.0.returns = double
+gp.nc.0.size = 0
+
+gp.nc.1 = ec.gp.GPNodeConstraints
+gp.nc.1.name = nc1
+gp.nc.1.returns = double
+gp.nc.1.size = 1
+gp.nc.1.child.0 = double
+
+gp.nc.2 = ec.gp.GPNodeConstraints
+gp.nc.2.name = nc2
+gp.nc.2.returns = double
+gp.nc.2.size = 2
+gp.nc.2.child.0 = double
+gp.nc.2.child.1 = double
+
+gp.nc.3 = ec.gp.GPNodeConstraints
+gp.nc.3.name = nc3
+gp.nc.3.returns = boolean
+gp.nc.3.size = 2
+gp.nc.3.child.0 = double
+gp.nc.3.child.1 = double
+
+gp.nc.4 = ec.gp.GPNodeConstraints
+gp.nc.4.name = nc4
+gp.nc.4.returns = double
+gp.nc.4.size = 3
+gp.nc.4.child.0 = boolean
+gp.nc.4.child.1 = double
+gp.nc.4.child.2 = double
+
+# We have one function set, of class GPFunctionSet
+gp.fs.size = 1
+gp.fs.0 = ec.gp.GPFunctionSet
+gp.fs.0.name = f0
+
+
+#Terminals
+gp.fs.0.size = 30
+
+#standar functions
+gp.fs.0.func.0 = ec.app.func.Add
+gp.fs.0.func.0.nc = nc2
+gp.fs.0.func.1 = ec.app.func.Cos
+gp.fs.0.func.1.nc = nc1
+gp.fs.0.func.2 = ec.app.func.Cube
+gp.fs.0.func.2.nc = nc1
+gp.fs.0.func.3 = ec.app.func.Div
+gp.fs.0.func.3.nc = nc2
+gp.fs.0.func.4 = ec.app.func.Exp
+gp.fs.0.func.4.nc = nc1
+gp.fs.0.func.5 = ec.app.func.Log
+gp.fs.0.func.5.nc = nc1
+gp.fs.0.func.6 = ec.app.func.Mul
+gp.fs.0.func.6.nc = nc2
+gp.fs.0.func.7 = ec.app.func.Neg
+gp.fs.0.func.7.nc = nc1
+gp.fs.0.func.8 = ec.app.func.Sin
+gp.fs.0.func.8.nc = nc1
+gp.fs.0.func.9 = ec.app.func.Sqrt
+gp.fs.0.func.9.nc = nc1
+gp.fs.0.func.10 = ec.app.func.Square
+gp.fs.0.func.10.nc = nc1
+gp.fs.0.func.11 = ec.app.func.Sub
+gp.fs.0.func.11.nc = nc2
+gp.fs.0.func.12 = ec.app.func.Tan
+gp.fs.0.func.12.nc = nc1
+gp.fs.0.func.13 = ec.app.func.Less
+gp.fs.0.func.13.nc = nc3
+gp.fs.0.func.14 = ec.app.func.Great
+gp.fs.0.func.14.nc = nc3
+gp.fs.0.func.15 = ec.app.func.Min
+gp.fs.0.func.15.nc = nc2
+gp.fs.0.func.16 = ec.app.func.Max
+gp.fs.0.func.16.nc = nc2
+gp.fs.0.func.17 = ec.app.func.If
+gp.fs.0.func.17.nc = nc4
+
+#ephemeral constant
+gp.fs.0.func.18 = ec.app.func.RegERC
+gp.fs.0.func.18.nc = nc0
+
+#symreg functions
+gp.fs.0.func.19 = ec.app.func.syreg.AL
+gp.fs.0.func.19.nc = nc0
+gp.fs.0.func.20 = ec.app.func.syreg.CA
+gp.fs.0.func.20.nc = nc0
+gp.fs.0.func.21 = ec.app.func.syreg.CH
+gp.fs.0.func.21.nc = nc0
+gp.fs.0.func.22 = ec.app.func.syreg.DE
+gp.fs.0.func.22.nc = nc0
+gp.fs.0.func.23 = ec.app.func.syreg.FA
+gp.fs.0.func.23.nc = nc0
+gp.fs.0.func.24 = ec.app.func.syreg.FSD
+gp.fs.0.func.24.nc = nc0
+gp.fs.0.func.25 = ec.app.func.syreg.PH
+gp.fs.0.func.25.nc = nc0
+gp.fs.0.func.26 = ec.app.func.syreg.RS
+gp.fs.0.func.26.nc = nc0
+gp.fs.0.func.27 = ec.app.func.syreg.SU
+gp.fs.0.func.27.nc = nc0
+gp.fs.0.func.28 = ec.app.func.syreg.TSD
+gp.fs.0.func.28.nc = nc0
+gp.fs.0.func.29 = ec.app.func.syreg.VA
+gp.fs.0.func.29.nc = nc0
+
+stat.file = stat/syreg-best.stat
+stat.num-children = 1
+stat.child.0 = ec.gp.koza.KozaShortStatistics
+stat.child.0.file = stat/syreg-gen.stat
+
+eval.problem = ec.app.SyRegProblem
+eval.problem.data = ec.app.ProjectData
+
+eval.problem.datafile = data/wine_quality_red.txt
+eval.problem.samplesize = 300
+
+eval.problem.testingfile = stat/syreg-test.stat
+
+select.tournament.size = 4
+
+generations = 200
+
+pop.subpop.0.size = 500
+pop.subpop.0.species.pipe.tries = 5
+pop.subpop.0.species.pipe.maxdepth = 17
+pop.subpop.0.species.pipe.toss = false
+
+breed.elite.0=1
+
+gp.koza.mutate.prob = 0.2
+
+gp.koza.xover.prob = 0.8
+gp.koza.xover.tries = 5
+
+silent = true
+
+evalthreads = 6
+breedthreads = 6
+seed.0 = time
+seed.1 = time
+seed.2 = time
+seed.3 = time
+seed.4 = time
+seed.5 = time
+
+jobs = 3

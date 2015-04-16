@@ -43,7 +43,8 @@ Temporary Items
 .apdisk
 
 #Java files
-.class
+*.class
 
 #ECJ files
-.stat
+*.stat
+*.xls
