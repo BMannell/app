@@ -1,14 +1,13 @@
-# We're derived some of this
-# from ../../simple/params, which defines
 # generational, basic evolutionary mechanisms, selection mechanisms...
 
-parent.0 = ../../simple/simple.params
+parent.0 = ../simple/simple.params
 
 #define type
 gp.type.a.size = 2
 gp.type.a.0.name = double
 gp.type.a.1.name = boolean
 gp.tc.0.returns = double
+gp.tc.1.returns = boolean
 
 # define node contraints
 
@@ -139,18 +138,9 @@ select.tournament.size = 4
 
 generations = 200
 
-pop.subpop.0.size = 500
-pop.subpop.0.species.pipe.tries = 5
-pop.subpop.0.species.pipe.maxdepth = 17
-pop.subpop.0.species.pipe.toss = false
-
 breed.elite.0=1
 
-gp.koza.mutate.prob = 0.2
-
-
-
-silent = true
+# silent = true
 
 evalthreads = 6
 breedthreads = 6
@@ -161,7 +151,7 @@ seed.3 = time
 seed.4 = time
 seed.5 = time
 
-jobs = 3
+jobs = 1
 
 
 #####################################
@@ -177,9 +167,46 @@ pop.subpop.0.species.fitness = ec.gp.koza.KozaFitness
 init = ec.gp.GPInitializer
 
 
-#################################
-# Looks like we will need to repeat this for every island
+# EXCHANGER
+exch = ec.exchange.InterPopulationExchange
+exch.select = ec.select.TournamentSelection
+exch.select-to-die = ec.select.RandomSelection
 
+# Number to send
+exch.size = 5
+
+# generation to begin at
+exch.start = 1
+
+#interval
+exch.mod = 8
+
+#fuck
+exch.subpop.0.num-dest = 1
+exch.subpop.0.dest.0 = 1
+
+exch.subpop.1.num-dest = 1
+exch.subpop.1.dest.0 = 2
+
+exch.subpop.2.num-dest = 1
+exch.subpop.2.dest.0 = 3
+
+exch.subpop.3.num-dest = 1
+exch.subpop.3.dest.0 = 0
+
+
+
+#################################
+# POPULATION PARAMS
+
+
+pop.subpops = 4
+pop.default-subpop = 0
+
+pop.subpop.0.size = 50
+pop.subpop.0.species.pipe.tries = 5
+pop.subpop.0.species.pipe.maxdepth = 17
+pop.subpop.0.species.pipe.toss = false
 
 pop.subpop.0.species = ec.gp.GPSpecies
 pop.subpop.0.species.ind = ec.gp.GPIndividual
@@ -187,13 +214,10 @@ pop.subpop.0.species.ind = ec.gp.GPIndividual
 # Retry 100 times for duplicates
 pop.subpop.0.duplicate-retries = 100
 
-# That GPIndividual has a single tree, which uses the
-# "tc0" Tree Constraints (which we define below later)
-
+# That GPIndividual has a single tree
 pop.subpop.0.species.ind.numtrees = 1
 pop.subpop.0.species.ind.tree.0 = ec.gp.GPTree
 pop.subpop.0.species.ind.tree.0.tc = tc0
-
 
 # The GPSpecies has 1 pipeline Crossover 
 # MultiBreeding to make 1 or 2 indivs
@@ -207,10 +231,14 @@ pop.subpop.0.species.pipe.num-sources = 1
 pop.subpop.0.species.pipe.source.0 = ec.gp.koza.CrossoverPipeline
 pop.subpop.0.species.pipe.source.0.prob = 0.9
 
+
+
+# POPULATION PARAMS
 #################################
 
 # Crossover will use Tournament Selection, try 5 times
 # time, have a max depth of 17, and use KozaNodeSelector
+gp.koza.xover.prob = 0.8
 gp.koza.xover.tries = 5
 gp.koza.xover.source.0 = ec.select.TournamentSelection
 gp.koza.xover.source.1 = same
@@ -223,6 +251,7 @@ gp.koza.xover.maxdepth = 17
 # Max depth of 17
 # Also, Point Mutation uses a GrowBuilder
 # by default, with a default of min-depth=max-depth=5
+gp.koza.mutate.prob = 0.2
 gp.koza.mutate.source.0 = ec.select.TournamentSelection
 gp.koza.mutate.ns.0 = ec.gp.koza.KozaNodeSelector
 gp.koza.mutate.build.0 = ec.gp.koza.GrowBuilder
@@ -269,17 +298,6 @@ gp.adf-stack.context = ec.gp.ADFContext
 gp.koza.ns.terminals = 0.1
 gp.koza.ns.nonterminals = 0.9
 gp.koza.ns.root = 0.0
-
-
-# You need to create at least one function set, 
-# called "f0", which your first tree will use.  
-# You don't need to include the class declaration here,
-# but it quiets warnings.
-
-gp.fs.size = 1
-gp.fs.0 = ec.gp.GPFunctionSet
-gp.fs.0.name = f0
-#fill the rest of this out on a per-problem basis
 
 
 # Here we define a single atomic type, "nil", which everyone will use.
