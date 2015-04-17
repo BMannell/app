@@ -135,11 +135,6 @@ select.tournament.size = 4
 
 generations = 200
 
-pop.subpop.0.size = 500
-pop.subpop.0.species.pipe.tries = 5
-pop.subpop.0.species.pipe.maxdepth = 17
-pop.subpop.0.species.pipe.toss = false
-
 breed.elite.0=1
 
 gp.koza.mutate.prob = 0.2
@@ -159,3 +154,43 @@ seed.4 = time
 seed.5 = time
 
 jobs = 3
+
+
+
+# EXCHANGER
+exch = ec.exchange.InterPopulationExchange
+exch.select = ec.select.TournamentSelection
+exch.select-to-die = ec.select.RandomSelection
+
+# Number to send
+exch.size = 5
+
+# generation to begin at
+exch.start = 1
+
+#interval
+exch.mod = 8
+
+#fuck
+exch.subpop.0.num-dest = 1
+exch.subpop.0.dest.0 = 1
+
+exch.subpop.1.num-dest = 1
+exch.subpop.1.dest.0 = 2
+
+exch.subpop.2.num-dest = 1
+exch.subpop.2.dest.0 = 3
+
+exch.subpop.3.num-dest = 1
+exch.subpop.3.dest.0 = 0
+
+
+#POPULATION
+
+pop.subpops = 4
+pop.default-subpop = 0
+
+pop.subpop.0.size = 50
+pop.subpop.0.species.pipe.tries = 5
+pop.subpop.0.species.pipe.maxdepth = 17
+pop.subpop.0.species.pipe.toss = false
