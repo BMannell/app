@@ -5,6 +5,7 @@ require 'csv'
 def run
 	experiments = 	ARGV[0].to_i || 1
 	jobs = 			ARGV[1].to_i || 1
+	islands = 		ARGV[2].to_i || nil
 
 	for e in 0..(experiments-1) do
 
@@ -28,7 +29,7 @@ def run
 
 		for y in 0..199 do 
 			worksheet.write(y,0,y)
-			['B','C','D'].each do |x|
+			['B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'].each do |x|
 				formula = build_formula("AVERAGE",jobs, y, x)
 				worksheet.write("#{x}#{y}", formula)
 			end

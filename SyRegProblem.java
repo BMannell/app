@@ -41,7 +41,7 @@ public class SyRegProblem extends GPProblem implements SimpleProblemForm{
     public double testingData[][];
 
 
-    public int testLog;
+    public int[] testLog;
 
     public void setup(final EvolutionState state,final Parameter base){
         System.out.println("Setup");
@@ -63,11 +63,14 @@ public class SyRegProblem extends GPProblem implements SimpleProblemForm{
                 //add data to tables
         initDataTables(inputfile, state);
 
-
-        File testFile =  state.parameters.getFile(base.push("testingfile"), null);
-
-        if (testFile!=null) try{testLog = state.output.addLog(testFile,true);}
-        catch (IOException i){state.output.fatal("An IOException occurred while trying to create the log " + testFile + ":\n" + i);}
+        int subPops = state.parameters.getInt(base.push("islands"),null);
+        testLog = new int[subPops];
+        for(int x =0; x < subPops; x ++){
+            File testFile = new File("ec\\app\\stat\\syreg-test" + x + ".stat");
+            if (testFile!=null) try{testLog[x] = state.output.addLog(testFile,true);}
+            catch (IOException i){state.output.fatal("An IOException occurred while trying to create the log " + testFile + ":\n" + i);}
+        }
+        
         System.out.println("Training");
 
     }
@@ -89,16 +92,19 @@ public class SyRegProblem extends GPProblem implements SimpleProblemForm{
         }
         catch (NumberFormatException e){state.output.fatal("Some tokens in the file were not numbers.");}
 
-        trainingData = new double[trainingSetSize][12];
-        testingData = new double[inputs.size()][12];
+
 
         //random number genreator to pick random records
         Random rando = new Random();
+
+        trainingData = new double[trainingSetSize][12];
 
         //grab a random record from the inputs and add it to the training set
         for(int i = 0; i<trainingSetSize;i++)
             trainingData[i] = inputs.remove(rando.nextInt(inputs.size()-1));
         
+        testingData = new double[inputs.size()][12];
+
         for(int i = 0; i < inputs.size();i++)
             testingData[i] = inputs.get(i);
         
@@ -178,7 +184,7 @@ public class SyRegProblem extends GPProblem implements SimpleProblemForm{
                 state,threadnum,input,stack,((GPIndividual)ind),this);
 
             try{
-                state.output.println(testRow[11] + " " + input.x, testLog);
+                state.output.println(testRow[11] + " " + input.x, testLog[subpopulation]);
             }catch(OutputException oe){
                 System.out.println("OE:183 - " + testRow[11] + " " + input.x);
             }
@@ -201,7 +207,7 @@ public class SyRegProblem extends GPProblem implements SimpleProblemForm{
         f.setStandardizedFitness(state, sum);
         f.hits = hits;
 
-        ind.printIndividualForHumans(state,testLog);
+        ind.printIndividualForHumans(state,testLog[subpopulation]);
     }
 
 }
