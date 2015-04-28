@@ -5,12 +5,11 @@ import ec.gp.*;
 import ec.util.*;
 
 
-
-public class StdSeven extends GPNode
+public class Nand extends GPNode
 {
-    public String toString() { return "Std7"; }
+    public String toString() { return "NAND"; }
 
-    public int expectedChildren() { return 0; }
+    public int expectedChildren() { return 2; }
 
     public void eval(final EvolutionState state,
         final int thread,
@@ -19,7 +18,16 @@ public class StdSeven extends GPNode
         final GPIndividual individual,
         final Problem problem)
     {
+        boolean boo;
         ProjectData rd = ((ProjectData)(input));
-        rd.x = ((ProjectProblem)problem).currentStd7;
+
+        children[0].eval(state,thread,input,stack,individual,problem);
+        boo = rd.b;
+        
+        children[1].eval(state,thread,input,stack,individual,problem);
+        return !(boo && rd.b);
     }
 }
+
+
+

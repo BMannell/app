@@ -1,13 +1,13 @@
-package ec.app.func.syreg;
-import ec.app.SyRegProblem;
-import ec.app.ProjectData;
+package ec.app.func;
+import ec.app.MultiplexerProblem;
+import ec.app.BooleanData;
 import ec.*;
 import ec.gp.*;
 import ec.util.*;
 
-public class CA extends GPNode
+public class D0 extends GPNode
 {
-    public String toString() { return "CitricAcid"; }
+    public String toString() { return "D0"; }
 
     public int expectedChildren() { return 0; }
 
@@ -19,6 +19,6 @@ public class CA extends GPNode
        final Problem problem)
     {
         ProjectData rd = ((ProjectData)(input));
-        rd.x = ((SyRegProblem)problem).currentCA;
+        rd.b= ((SyRegProblem)problem).currentD0;
     }
 }

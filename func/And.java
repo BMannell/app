@@ -5,9 +5,9 @@ import ec.gp.*;
 import ec.util.*;
 
 
-public class Great extends GPNode
+public class And extends GPNode
     {
-    public String toString() { return ">"; }
+    public String toString() { return "AND"; }
 
     public int expectedChildren() { return 2; }
 
@@ -18,17 +18,16 @@ public class Great extends GPNode
         final GPIndividual individual,
         final Problem problem)
         {
-        double result;
+        boolean boo;
         ProjectData rd = ((ProjectData)(input));
 
         children[0].eval(state,thread,input,stack,individual,problem);
-        result = rd.x;
-
-        // can't shortcut because of NaN or +-Infinity
-
-        children[1].eval(state,thread,input,stack,individual,problem);
-        if(result > rd.x){rd.b = true;}
-        else{rd.b = false;}
+        if(rd.b){ //if true evaluate the other branch
+          children[1].eval(state,thread,input,stack,individual,problem);
+          return rd.b;
+        }
+          else
+            return false;
         }
     }
 

@@ -1,13 +1,13 @@
-package ec.app.func.syreg;
-import ec.app.SyRegProblem;
-import ec.app.ProjectData;
+package ec.app.func;
+import ec.app.MultiplexerProblem;
+import ec.app.BooleanData;
 import ec.*;
 import ec.gp.*;
 import ec.util.*;
 
-public class TSD extends GPNode
+public class A1 extends GPNode
 {
-    public String toString() { return "TotalSulfurDioxide"; }
+    public String toString() { return "A1"; }
 
     public int expectedChildren() { return 0; }
 
@@ -18,7 +18,7 @@ public class TSD extends GPNode
        final GPIndividual individual,
        final Problem problem)
     {
-        ProjectData rd = ((ProjectData)(input));
-        rd.x = ((SyRegProblem)problem).currentTSD;
+        BooleanData rd = ((BooleanData)(input));
+        rd.b= ((SyRegProblem)problem).currentA1;
     }
 }
