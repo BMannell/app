@@ -1,47 +1,25 @@
-parent.0 = ../../gp/koza/koza.params
+parent.0 = ../gp/koza/koza.params
 
 #define type
-gp.type.a.size = 2
-gp.type.a.0.name = double
-gp.type.a.1.name = boolean
-gp.tc.0.returns = double
+gp.type.a.size = 1
+gp.type.a.0.name = boolean
+gp.tc.0.returns = boolean
 
 # define node contraints
 
-gp.nc.size = 5
+gp.nc.size = 2
 
 gp.nc.0 = ec.gp.GPNodeConstraints
 gp.nc.0.name = nc0
-gp.nc.0.returns = double
+gp.nc.0.returns = boolean
 gp.nc.0.size = 0
 
 gp.nc.1 = ec.gp.GPNodeConstraints
 gp.nc.1.name = nc1
-gp.nc.1.returns = double
-gp.nc.1.size = 1
-gp.nc.1.child.0 = double
-
-gp.nc.2 = ec.gp.GPNodeConstraints
-gp.nc.2.name = nc2
-gp.nc.2.returns = double
-gp.nc.2.size = 2
-gp.nc.2.child.0 = double
-gp.nc.2.child.1 = double
-
-gp.nc.3 = ec.gp.GPNodeConstraints
-gp.nc.3.name = nc3
-gp.nc.3.returns = boolean
-gp.nc.3.size = 2
-gp.nc.3.child.0 = double
-gp.nc.3.child.1 = double
-
-gp.nc.4 = ec.gp.GPNodeConstraints
-gp.nc.4.name = nc4
-gp.nc.4.returns = double
-gp.nc.4.size = 3
-gp.nc.4.child.0 = boolean
-gp.nc.4.child.1 = double
-gp.nc.4.child.2 = double
+gp.nc.1.returns = boolean
+gp.nc.1.size = 2
+gp.nc.1.child.0 = boolean
+gp.nc.1.child.1 = boolean
 
 # We have one function set, of class GPFunctionSet
 gp.fs.size = 1
@@ -50,94 +28,56 @@ gp.fs.0.name = f0
 
 
 #Terminals
-gp.fs.0.size = 28
-gp.fs.0.func.0 = ec.app.pic.func.Pixel
-gp.fs.0.func.0.nc = nc0
-gp.fs.0.func.1 = ec.app.pic.func.AvgThree
-gp.fs.0.func.1.nc = nc0
-gp.fs.0.func.2 = ec.app.pic.func.AvgFive
-gp.fs.0.func.2.nc = nc0
-gp.fs.0.func.3 = ec.app.pic.func.AvgSeven
-gp.fs.0.func.3.nc = nc0
-gp.fs.0.func.4 = ec.app.pic.func.StdThree
-gp.fs.0.func.4.nc = nc0
-gp.fs.0.func.5 = ec.app.pic.func.StdFive
-gp.fs.0.func.5.nc = nc0
-gp.fs.0.func.6 = ec.app.pic.func.StdSeven
-gp.fs.0.func.6.nc = nc0
-gp.fs.0.func.7 = ec.app.pic.func.Edge
-gp.fs.0.func.7.nc = nc0
-gp.fs.0.func.8 = ec.app.pic.func.Sharpen
-gp.fs.0.func.8.nc = nc0
-gp.fs.0.func.9 = ec.app.pic.func.RegERC
-gp.fs.0.func.9.nc = nc0
-gp.fs.0.func.10 = ec.app.pic.func.Add
-gp.fs.0.func.10.nc = nc2
-gp.fs.0.func.11 = ec.app.pic.func.Cos
-gp.fs.0.func.11.nc = nc1
-gp.fs.0.func.12 = ec.app.pic.func.Cube
-gp.fs.0.func.12.nc = nc1
-gp.fs.0.func.13 = ec.app.pic.func.Div
-gp.fs.0.func.13.nc = nc2
-gp.fs.0.func.14 = ec.app.pic.func.Exp
-gp.fs.0.func.14.nc = nc1
-gp.fs.0.func.15 = ec.app.pic.func.Log
-gp.fs.0.func.15.nc = nc1
-gp.fs.0.func.16 = ec.app.pic.func.Mul
-gp.fs.0.func.16.nc = nc2
-gp.fs.0.func.17 = ec.app.pic.func.Neg
-gp.fs.0.func.17.nc = nc1
-gp.fs.0.func.18 = ec.app.pic.func.Sin
-gp.fs.0.func.18.nc = nc1
-gp.fs.0.func.19 = ec.app.pic.func.Sqrt
-gp.fs.0.func.19.nc = nc1
-gp.fs.0.func.20 = ec.app.pic.func.Square
-gp.fs.0.func.20.nc = nc1
-gp.fs.0.func.21 = ec.app.pic.func.Sub
-gp.fs.0.func.21.nc = nc2
-gp.fs.0.func.22 = ec.app.pic.func.Tan
-gp.fs.0.func.22.nc = nc1
-gp.fs.0.func.23 = ec.app.pic.func.Less
-gp.fs.0.func.23.nc = nc3
-gp.fs.0.func.24 = ec.app.pic.func.Great
-gp.fs.0.func.24.nc = nc3
-gp.fs.0.func.25 = ec.app.pic.func.Min
-gp.fs.0.func.25.nc = nc2
-gp.fs.0.func.26 = ec.app.pic.func.Max
-gp.fs.0.func.26.nc = nc2
-gp.fs.0.func.27 = ec.app.pic.func.If
-gp.fs.0.func.27.nc = nc4
+gp.fs.0.size = 15
 
-stat.file = stat/img04/best.stat
+#standar functions
+gp.fs.0.func.0 = ec.app.func.And
+gp.fs.0.func.0.nc = nc1
+gp.fs.0.func.1 = ec.app.func.Nand
+gp.fs.0.func.1.nc = nc1
+gp.fs.0.func.2 = ec.app.func.Nor
+gp.fs.0.func.2.nc = nc1
+gp.fs.0.func.3 = ec.app.func.Or
+gp.fs.0.func.3.nc = nc1
+gp.fs.0.func.4 = ec.app.func.D0
+gp.fs.0.func.4.nc = nc0
+gp.fs.0.func.5 = ec.app.func.D1
+gp.fs.0.func.5.nc = nc0
+gp.fs.0.func.6 = ec.app.func.D2
+gp.fs.0.func.6.nc = nc0
+gp.fs.0.func.7 = ec.app.func.D3
+gp.fs.0.func.7.nc = nc0
+gp.fs.0.func.8 = ec.app.func.D4
+gp.fs.0.func.8.nc = nc0
+gp.fs.0.func.9 = ec.app.func.D5
+gp.fs.0.func.9.nc = nc0
+gp.fs.0.func.10 = ec.app.func.D6
+gp.fs.0.func.10.nc = nc0
+gp.fs.0.func.11 = ec.app.func.D7
+gp.fs.0.func.11.nc = nc0
+gp.fs.0.func.12 = ec.app.func.A0
+gp.fs.0.func.12.nc = nc0
+gp.fs.0.func.13 = ec.app.func.A1
+gp.fs.0.func.13.nc = nc0
+gp.fs.0.func.14 = ec.app.func.A2
+gp.fs.0.func.14.nc = nc0
+
+stat.file = stat/testing/best.stat
 stat.num-children = 1
 stat.child.0 = ec.gp.koza.KozaShortStatistics
-stat.child.0.file = stat/img04/gen.stat
+stat.child.0.file = stat/testing/gen.stat
+stat.child.0.do-subpops = true
 
-eval.problem = ec.app.pic.PicProblem
-eval.problem.data = ec.app.pic.PicData
-eval.problem.numberofimages = 4
-eval.problem.imagefile1 = images/img2.png
-eval.problem.imagefile2 = images/img3.png
-eval.problem.imagefile3 = images/img4.png
-eval.problem.imagefile4 = images/img6.png
+eval.problem = ec.app.MultiplexerProblem
+eval.problem.data = ec.app.BooleanData
 
-eval.problem.confusionimagefile1 = stat/img04/conf-img2.png
-eval.problem.confusionimagefile2 = stat/img04/conf-img3.png
-eval.problem.confusionimagefile3 = stat/img04/conf-img4.png
-eval.problem.confusionimagefile4 = stat/img04/conf-img6.png
+eval.problem.samplesize = 20
 
-eval.problem.goodimage= 2
-eval.problem.samplesize = 1000
-eval.problem.testingfile = stat/img04/test.stat
+eval.problem.islands = 4
 
 select.tournament.size = 4
 
 generations = 200
-
-pop.subpop.0.size = 500
-pop.subpop.0.species.pipe.tries = 5
-pop.subpop.0.species.pipe.maxdepth = 17
-pop.subpop.0.species.pipe.toss = false
 
 breed.elite.0=1
 
@@ -148,15 +88,53 @@ gp.koza.xover.tries = 5
 
 silent = true
 
-evalthreads = 8
-breedthreads = 8
+evalthreads = 6
+breedthreads = 6
 seed.0 = time
 seed.1 = time
 seed.2 = time
 seed.3 = time
 seed.4 = time
 seed.5 = time
-seed.6 = time
-seed.7 = time
 
-jobs = 10
+jobs = 3
+
+
+
+# EXCHANGER
+exch = ec.exchange.InterPopulationExchange
+exch.select = ec.select.TournamentSelection
+exch.select-to-die = ec.select.RandomSelection
+
+# Number to send
+exch.size = 5
+
+# generation to begin at
+exch.start = 1
+
+#interval
+exch.mod = 8
+
+#fuck
+exch.subpop.0.num-dest = 1
+exch.subpop.0.dest.0 = 1
+
+exch.subpop.1.num-dest = 1
+exch.subpop.1.dest.0 = 2
+
+exch.subpop.2.num-dest = 1
+exch.subpop.2.dest.0 = 3
+
+exch.subpop.3.num-dest = 1
+exch.subpop.3.dest.0 = 0
+
+
+#POPULATION
+
+pop.subpops = 4
+pop.default-subpop = 0
+
+pop.subpop.0.size = 50
+pop.subpop.0.species.pipe.tries = 5
+pop.subpop.0.species.pipe.maxdepth = 17
+pop.subpop.0.species.pipe.toss = false

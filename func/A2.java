@@ -19,6 +19,6 @@ public class A2 extends GPNode
        final Problem problem)
     {
         BooleanData rd = ((BooleanData)(input));
-        rd.b= ((SyRegProblem)problem).currentA2;
+        rd.b= ((MultiplexerProblem)problem).currentA2;
     }
 }

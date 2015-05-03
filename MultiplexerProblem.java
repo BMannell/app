@@ -1,6 +1,5 @@
 package ec.app;
 
-import ec.app.BooleanData;
 import ec.util.*;
 import ec.*;
 import ec.gp.*;
@@ -15,11 +14,7 @@ public class MultiplexerProblem extends GPProblem implements SimpleProblemForm{
 
     private static final long serialVersionUID = 1;
 
-    final double HIT_LEVEL = 0.01;
-    final double PROBABLY_ZERO = 1.11E-15;
-    final double BIG_NUMBER = 1.0e15;  // the same as lilgp uses
-
-
+    public Multiplexer multiplexer = new Multiplexer(8);
     public int sampleSize;
 
     public boolean currentD0;
@@ -34,13 +29,8 @@ public class MultiplexerProblem extends GPProblem implements SimpleProblemForm{
     public boolean currentA1;
     public boolean currentA2;
 
-
-    public int trainingSetSize;
-    public int testingSetSize;
-
-    public double trainingData[][];
-    public double testingData[][];
-
+    public int trainingRuns = 20;
+    public int testingRuns = 20;
 
     public int[] testLog;
 
@@ -49,66 +39,23 @@ public class MultiplexerProblem extends GPProblem implements SimpleProblemForm{
         super.setup(state,base);
 
         // verify our input is the right class (or subclasses from it)
-        if (!(input instanceof ProjectData))
-            state.output.fatal("GPData class must subclass from " + ProjectData.class,
+        if (!(input instanceof BooleanData))
+            state.output.fatal("GPData class must subclass from " + BooleanData.class,
                 base.push(P_DATA), null);
         
-        trainingSetSize = state.parameters.getInt(base.push("samplesize"),null,0);
-        if (trainingSetSize<1) state.output.fatal("Training Set Size must be an integer greater than 0", base.push("samplesize"));
-
-        //System.out.println("Data Size: " + dataSetSize + " TrainingSize: " + trainingSize + " Training: " + trainingSetSize + " TestingSetSize: "  + testingSetSize);
-
-        //get input file to load data from
-        InputStream inputfile = state.parameters.getResource(base.push("datafile"), null);
-
-                //add data to tables
-        initDataTables(inputfile, state);
+        trainingRuns = state.parameters.getInt(base.push("samplesize"),null,0);
+        if (trainingRuns<1) state.output.fatal("Training Set Size must be an integer greater than 0", base.push("samplesize"));
 
         int subPops = state.parameters.getInt(base.push("islands"),null);
         testLog = new int[subPops];
         for(int x =0; x < subPops; x ++){
-            File testFile = new File("ec\\app\\stat\\syreg-test" + x + ".stat");
+            File testFile = new File("ec\\app\\stat\\testing\\multi-test" + x + ".stat");
             if (testFile!=null) try{testLog[x] = state.output.addLog(testFile,true);}
             catch (IOException i){state.output.fatal("An IOException occurred while trying to create the log " + testFile + ":\n" + i);}
         }
-        
+
         System.out.println("Training");
 
-    }
-
-    private void initDataTables(InputStream inputfile, final EvolutionState state){
-
-        ArrayList<double[]> inputs = new ArrayList<double[]>();
-        
-        try{
-            Scanner scan = new Scanner(inputfile);
-            while(scan.hasNextLine()){
-                double row[] = new double[12];
-                for(int y = 0; y < 12; y ++){
-                    if (scan.hasNextDouble()) row[y] = scan.nextDouble();
-                    else state.output.fatal("Not enough data points in file: expected 12");
-                }
-                inputs.add(row);
-            }
-        }
-        catch (NumberFormatException e){state.output.fatal("Some tokens in the file were not numbers.");}
-
-
-
-        //random number genreator to pick random records
-        Random rando = new Random();
-
-        trainingData = new double[trainingSetSize][12];
-
-        //grab a random record from the inputs and add it to the training set
-        for(int i = 0; i<trainingSetSize;i++)
-            trainingData[i] = inputs.remove(rando.nextInt(inputs.size()-1));
-        
-        testingData = new double[inputs.size()][12];
-
-        for(int i = 0; i < inputs.size();i++)
-            testingData[i] = inputs.get(i);
-        
     }
 
     public void evaluate(final EvolutionState state, 
@@ -118,39 +65,35 @@ public class MultiplexerProblem extends GPProblem implements SimpleProblemForm{
     {
         if (!ind.evaluated)  // don't bother reevaluating
         {
-            ProjectData input = (ProjectData)(this.input);
+            BooleanData input = (BooleanData)(this.input);
 
             int hits = 0;
             double sum = 0.0;
             double result;
-            for (double[] trainingRow: trainingData){
+            for (int x = 0; x < trainingRuns; x++){
 
-                currentFA = trainingRow[0];
-                currentVA = trainingRow[1];
-                currentCA = trainingRow[2];
-                currentRS = trainingRow[3];
-                currentCH = trainingRow[4];
-                currentFSD = trainingRow[5];
-                currentTSD = trainingRow[6];
-                currentDE = trainingRow[7];
-                currentPH = trainingRow[8];
-                currentSU = trainingRow[9];
-                currentAL = trainingRow[10];
+                currentD0 = state.random[threadnum].nextBoolean();
+                currentD1 = state.random[threadnum].nextBoolean();
+                currentD2 = state.random[threadnum].nextBoolean();
+                currentD3 = state.random[threadnum].nextBoolean();
+                currentD4 = state.random[threadnum].nextBoolean();
+                currentD5 = state.random[threadnum].nextBoolean();
+                currentD6 = state.random[threadnum].nextBoolean();
+                currentD7 = state.random[threadnum].nextBoolean();
+                currentA0 = state.random[threadnum].nextBoolean();
+                currentA1 = state.random[threadnum].nextBoolean();
+                currentA2 = state.random[threadnum].nextBoolean();
 
                 ((GPIndividual)ind).trees[0].child.eval(
                     state,threadnum,input,stack,((GPIndividual)ind),this);
 
-                result = Math.abs(trainingRow[11] - input.x);
-
-                if (! (result < BIG_NUMBER ) )
-                    result = BIG_NUMBER;
-
-                else if (result<PROBABLY_ZERO)
-                    result = 0.0;
-
-                if (result <= HIT_LEVEL) hits++;
-
-                sum += result;              
+                boolean answer = multiplexer.evaluate(new boolean[]{currentA0,currentA1,currentA2,currentD0,currentD1,currentD2,currentD3,currentD4,currentD5,currentD6,currentD7});
+                
+                if (input.b == answer){
+                    hits++;
+                }else{
+                    sum++;
+                }              
             }
 
             KozaFitness f = ((KozaFitness)ind.fitness);
@@ -162,45 +105,42 @@ public class MultiplexerProblem extends GPProblem implements SimpleProblemForm{
 
     public void describe(EvolutionState state, Individual ind, int subpopulation, int threadnum, int log){
         System.out.println("Testing");
-        ProjectData input = (ProjectData)(this.input);
+        BooleanData input = (BooleanData)(this.input);
 
         int hits = 0;
         double sum = 0.0;
         double result;
 
-        for (double[] testRow: testingData){
+        for (int x = 0; x < testingRuns; x++){
 
-            currentFA = testRow[0];
-            currentVA = testRow[1];
-            currentCA = testRow[2];
-            currentRS = testRow[3];
-            currentCH = testRow[4];
-            currentFSD = testRow[5];
-            currentTSD = testRow[6];
-            currentDE = testRow[7];
-            currentPH = testRow[8];
-            currentSU = testRow[9];
-            currentAL = testRow[10];
+            currentD0 = state.random[threadnum].nextBoolean();
+            currentD1 = state.random[threadnum].nextBoolean();
+            currentD2 = state.random[threadnum].nextBoolean();
+            currentD3 = state.random[threadnum].nextBoolean();
+            currentD4 = state.random[threadnum].nextBoolean();
+            currentD5 = state.random[threadnum].nextBoolean();
+            currentD6 = state.random[threadnum].nextBoolean();
+            currentD7 = state.random[threadnum].nextBoolean();
+            currentA0 = state.random[threadnum].nextBoolean();
+            currentA1 = state.random[threadnum].nextBoolean();
+            currentA2 = state.random[threadnum].nextBoolean();
+
             ((GPIndividual)ind).trees[0].child.eval(
                 state,threadnum,input,stack,((GPIndividual)ind),this);
-
+            
+            boolean answer = multiplexer.evaluate(new boolean[]{currentA0,currentA1,currentA2,currentD0,currentD1,currentD2,currentD3,currentD4,currentD5,currentD6,currentD7});
+            
             try{
-                state.output.println(testRow[11] + " " + input.x, testLog[subpopulation]);
+                state.output.println(answer + " " + input.b, testLog[subpopulation]);
             }catch(OutputException oe){
-                System.out.println("OE:183 - " + testRow[11] + " " + input.x);
+                System.out.println("OE:183 - " + answer + " " + input.b);
             }
 
-            result = Math.abs(testRow[11] - input.x);
-
-            if (! (result < BIG_NUMBER ) ) 
-                result = BIG_NUMBER;
-
-            else if (result<PROBABLY_ZERO)
-                result = 0.0;
-
-            if (result <= HIT_LEVEL) hits++;
-
-            sum += result;              
+            if (input.b == answer){
+                hits++;
+            }else{
+                sum++;
+            }            
         }
 
         // the fitness better be KozaFitness!

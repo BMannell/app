@@ -19,15 +19,12 @@ public class Or extends GPNode
     final Problem problem)
   {
     boolean boo;
-    ProjectData rd = ((ProjectData)(input));
+    BooleanData rd = ((BooleanData)(input));
 
     children[0].eval(state,thread,input,stack,individual,problem);
 
-    if(rd.b)
-      return rd.b;
-    else{
+    if(!rd.b){
       children[1].eval(state,thread,input,stack,individual,problem);
-      return rd.b;
     }
   }
 }

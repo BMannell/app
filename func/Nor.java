@@ -18,15 +18,14 @@ public class Nor extends GPNode
     final Problem problem)
   {
     boolean boo;
-    ProjectData rd = ((ProjectData)(input));
+    BooleanData rd = ((BooleanData)(input));
 
     children[0].eval(state,thread,input,stack,individual,problem);
 
     if(rd.b)
-      return false;
+      rd.b = false;
     else{
       children[1].eval(state,thread,input,stack,individual,problem);
-      return rd.b;
     }
   }
 }

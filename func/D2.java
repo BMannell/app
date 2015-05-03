@@ -18,7 +18,7 @@ public class D2 extends GPNode
        final GPIndividual individual,
        final Problem problem)
     {
-        ProjectData rd = ((ProjectData)(input));
-        rd.b= ((SyRegProblem)problem).currentD2;
+        BooleanData rd = ((BooleanData)(input));
+        rd.b= ((MultiplexerProblem)problem).currentD2;
     }
 }

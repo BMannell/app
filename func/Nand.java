@@ -19,13 +19,13 @@ public class Nand extends GPNode
         final Problem problem)
     {
         boolean boo;
-        ProjectData rd = ((ProjectData)(input));
+        BooleanData rd = ((BooleanData)(input));
 
         children[0].eval(state,thread,input,stack,individual,problem);
         boo = rd.b;
         
         children[1].eval(state,thread,input,stack,individual,problem);
-        return !(boo && rd.b);
+        rd.b = !(boo && rd.b);
     }
 }
 
